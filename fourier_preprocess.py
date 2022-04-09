@@ -22,7 +22,7 @@ def find_fourier_helper(signal, frame_rate, start, end):
 
 
 
-def animate_fourier(filename, time_window):
+def animate_fourier(filename, time_window, pause_time):
 
     spf = wave.open(filename, "r")
     signal = spf.readframes(-1)
@@ -39,19 +39,34 @@ def animate_fourier(filename, time_window):
 
     for window_id in range(num_windows):
         yf, xf, samples = find_fourier_helper(signal, frame_rate, window_id*time_window, (window_id + 1)*time_window)
+        
+        yf = yf[0:samples//2]
+        
         plt.cla()
-        plt.xlim(0, 2000)
-        plt.ylim(0, 20000)
-        plt.grid()
         plt.plot(xf, 2.0/samples * np.abs(yf[0:samples//2]))
-        plt.pause(0.1)
+        plot_helper(pause_time, filename)
 
+
+
+def plot_helper(pause_time, filename):
+
+    filename = filename[:-4]
+
+    plt.xlim(0, 1500)
+    plt.ylim(0, 20000)
+    plt.grid()
+    plt.xlabel("Frequency")
+    plt.ylabel("Amplitude")
+    plt.title("Fast Fourier Transform for " + filename)
+
+    plt.pause(pause_time)
+
+
+
+
+pause_time = 0.1
 
 plt.figure(1)
-plt.xlim(0, 3000)
-plt.grid()
-
-animate_fourier("high_test.wav", 2500)
-animate_fourier("low_test.wav", 2500)
-
+animate_fourier("fft_test.wav", 3000, pause_time)
+animate_fourier("low_test.wav", 3000, pause_time)
 plt.show()
