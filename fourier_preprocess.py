@@ -3,6 +3,7 @@ from scipy.fft import fft, fftfreq
 import numpy as np
 import wave
 import sys
+import csv
 
 
 
@@ -22,9 +23,9 @@ def find_fourier_helper(signal, frame_rate, start, end):
 
 
 
-def animate_fourier(filename, time_window, pause_time):
+def run_fourier(audio_filename, time_window, shift_size, pause_time = 0.1, animate = False, write_to_csv = False, csv_filename = "testcsv.csv"):
 
-    spf = wave.open(filename, "r")
+    spf = wave.open(audio_filename, "r")
     signal = spf.readframes(-1)
     signal = np.frombuffer(signal, "int16")
     frame_rate = spf.getframerate()
@@ -33,40 +34,52 @@ def animate_fourier(filename, time_window, pause_time):
     if spf.getnchannels() == 2:
         print("Just mono files")
         sys.exit(0)
-    
+
     signal_length = signal.size
-    num_windows = signal_length // time_window
+    current_loc = 0
 
-    for window_id in range(num_windows):
-        yf, xf, samples = find_fourier_helper(signal, frame_rate, window_id*time_window, (window_id + 1)*time_window)
-        
+    if write_to_csv:
+        f_csv = open(csv_filename, 'w')
+        f_csv.truncate()
+        csv_writer = csv.writer(f_csv)
+
+    while current_loc + time_window + 1 < signal_length:
+
+        yf, xf, samples = find_fourier_helper(signal, frame_rate, current_loc, current_loc + time_window)
         yf = yf[0:samples//2]
-        
-        plt.cla()
-        plt.plot(xf, 2.0/samples * np.abs(yf[0:samples//2]))
-        plot_helper(pause_time, filename)
+
+        y_vals = 2.0/samples * np.abs(yf[0:samples//2])
+
+        if animate:
+            plt.cla()
+            plt.plot(xf, y_vals)
+            plot_helper(pause_time, audio_filename)
+
+        if write_to_csv: csv_writer.writerow(y_vals)
+
+        current_loc += shift_size
 
 
 
-def plot_helper(pause_time, filename):
 
-    filename = filename[:-4]
 
-    plt.xlim(0, 1500)
-    plt.ylim(0, 20000)
+def plot_helper(pause_time, audio_filename):
+
+    audio_filename = audio_filename[:-4]
+
+    plt.xlim(0, 1400)
+    plt.ylim(0, 14000)
     plt.grid()
     plt.xlabel("Frequency")
     plt.ylabel("Amplitude")
-    plt.title("Fast Fourier Transform for " + filename)
+    plt.title("Fast Fourier Transform for " + audio_filename)
 
     plt.pause(pause_time)
 
 
 
-
-pause_time = 0.1
+pause_time = 0.01
 
 plt.figure(1)
-animate_fourier("Moka-phonemes.wav", 2000, pause_time)
-# animate_fourier("low_test.wav", 3000, pause_time)
+run_fourier("low_test.wav", 2000, 1000, pause_time, animate=True, write_to_csv=True, csv_filename="testcsv.csv")
 plt.show()
