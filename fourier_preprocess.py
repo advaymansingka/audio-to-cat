@@ -67,6 +67,6 @@ def plot_helper(pause_time, filename):
 pause_time = 0.1
 
 plt.figure(1)
-animate_fourier("fft_test.wav", 3000, pause_time)
-animate_fourier("low_test.wav", 3000, pause_time)
+animate_fourier("Moka-phonemes.wav", 2000, pause_time)
+# animate_fourier("low_test.wav", 3000, pause_time)
 plt.show()
