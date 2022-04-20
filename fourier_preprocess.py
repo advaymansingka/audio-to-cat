@@ -65,7 +65,7 @@ def plot_helper(pause_time, audio_filename):
 
     audio_filename = audio_filename[:-4]
 
-    plt.xlim(0, 1400)
+    plt.xlim(0, 5000)
     plt.ylim(0, 14000)
     plt.grid()
     plt.xlabel("Frequency")

@@ -69,9 +69,9 @@ def visual_test(model, data):
         plt.cla()
         plt.plot(x_train[0], color='blue', linewidth=1)
         plt.plot(x_hat[0], color='red', linewidth=1)
-        plt.xlim(0, 100)
-        plt.ylim(0, 14000)
-        plt.pause(0.03)
+        plt.xlim(0, 250)
+        plt.ylim(0, 10000)
+        plt.pause(0.005)
 
 
 
@@ -79,7 +79,7 @@ def main():
 
     # traintest = pd.read_csv("testcsv.csv")
 
-    with open('testcsv.csv', 'r') as f:
+    with open('sample_audio_1.csv', 'r') as f:
         data = list(csv.reader(f, delimiter=","))
  
     data = np.array(data)
@@ -94,7 +94,7 @@ def main():
     model = AE(num_features)
 
     # Train AE
-    for epoch_id in range(100):
+    for epoch_id in range(50):
         total_loss = train_vae(model, data)
         print(f"Train Epoch: {epoch_id} \tLoss: {total_loss/len(data):.6f}")
 
