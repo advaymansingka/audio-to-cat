@@ -61,8 +61,6 @@ def run_fourier(audio_filename, time_window, shift_size, pause_time = 0.1, anima
 
 
 
-
-
 def plot_helper(pause_time, audio_filename):
 
     audio_filename = audio_filename[:-4]
@@ -77,9 +75,8 @@ def plot_helper(pause_time, audio_filename):
     plt.pause(pause_time)
 
 
-
 pause_time = 0.001
 
 plt.figure(1)
-run_fourier("low_test.wav", 2500, 1000, pause_time, animate=True, write_to_csv=True, csv_filename="sample_audio_1.csv")
+run_fourier("Advay-OAMF.wav", 2500, 1000, pause_time, animate=True, write_to_csv=True, csv_filename="sample_audio_1.csv")
 plt.show()
