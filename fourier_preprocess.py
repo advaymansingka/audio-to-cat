@@ -78,7 +78,7 @@ def plot_helper(pause_time, audio_filename):
 
 
 
-pause_time = 0.01
+pause_time = 0.001
 
 plt.figure(1)
 run_fourier("low_test.wav", 2000, 1000, pause_time, animate=True, write_to_csv=True, csv_filename="testcsv.csv")

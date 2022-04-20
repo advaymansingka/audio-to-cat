@@ -11,8 +11,9 @@ import random
 import tensorflow as tf
 from tensorflow.math import sigmoid
 from tqdm import tqdm
-from vae import VAE, reparametrize, loss_function
+from ae import AE, loss_function
 import csv
+import pandas as pd
 
 
 def train_vae(model, data):
@@ -33,7 +34,7 @@ def train_vae(model, data):
     optimizer = tf.keras.optimizers.Adam(learning_rate = 0.001)
     total_loss = 0
 
-    batch_size = 4
+    batch_size = 30
     num_batches = data.shape[0] // batch_size
 
     for i in range(num_batches):
@@ -42,8 +43,8 @@ def train_vae(model, data):
 
         with tf.GradientTape() as tape:
 
-            x_hat, mu, logvar = model.call(x_train)
-            loss = loss_function(x_hat, x_train, mu, logvar)
+            x_hat = model.call(x_train)
+            loss = loss_function(x_hat, x_train)
 
             train_vars = model.trainable_variables
             gradients = tape.gradient(loss, train_vars)
@@ -54,22 +55,52 @@ def train_vae(model, data):
     return total_loss
 
 
+
+def visual_test(model, data):
+
+    for i in range(data.shape[0]):
+
+        x_train = data[i : (i+1)]
+        x_hat = model.call(x_train)
+
+        x_train = x_train.numpy()
+        x_hat = x_hat.numpy()
+
+        plt.cla()
+        plt.plot(x_train[0], color='blue', linewidth=1)
+        plt.plot(x_hat[0], color='red', linewidth=1)
+        plt.xlim(0, 100)
+        plt.ylim(0, 14000)
+        plt.pause(0.03)
+
+
+
 def main():
-    # Load MNIST dataset
+
+    # traintest = pd.read_csv("testcsv.csv")
+
     with open('testcsv.csv', 'r') as f:
         data = list(csv.reader(f, delimiter=","))
  
     data = np.array(data)
     data = tf.convert_to_tensor(data, dtype=tf.float32)
-    data = tf.reshape(data, shape=(data.shape[0], 1, data.shape[1], 1))
+    # data = tf.reshape(data, shape=(data.shape[0], data.shape[1]))
+
+    print(data.shape)
+
+    num_features = data.shape[1]
 
     # Get an instance of VAE
-    model = VAE(data.shape[2])
+    model = AE(num_features)
 
-    # Train VAE
+    # Train AE
     for epoch_id in range(100):
         total_loss = train_vae(model, data)
         print(f"Train Epoch: {epoch_id} \tLoss: {total_loss/len(data):.6f}")
+
+    plt.figure(1)
+    visual_test(model, data)
+    plt.show()
 
 
 if __name__ == "__main__":
