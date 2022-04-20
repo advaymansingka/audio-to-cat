@@ -12,7 +12,7 @@ class AE(tf.keras.Model):
     def __init__(self, input_size):
         super(AE, self).__init__()
 
-        self.encoded_size = 4
+        self.encoded_size = 15
 
         ############################################################################################
         # TODO: Implement the fully-connected encoder architecture described in the notebook.      #
@@ -27,12 +27,12 @@ class AE(tf.keras.Model):
         self.encoder = Sequential([
             Flatten(),
             Dense(input_size, activation = 'relu'),
-            Dense(ceil(input_size / 2), activation = 'sigmoid'),
-            Dense(ceil(input_size / 5), activation = 'sigmoid'),
-            Dense(ceil(input_size / 10), activation = 'sigmoid'),
-            Dense(ceil(input_size / 20), activation = 'sigmoid'),
-            Dense(ceil(input_size / 40), activation = 'sigmoid'),
-            Dense(self.encoded_size, activation = 'sigmoid'),
+            Dense(ceil(input_size / 2), activation = 'relu'),
+            Dense(ceil(input_size / 5), activation = 'relu'),
+            Dense(ceil(input_size / 10), activation = 'relu'),
+            # Dense(ceil(input_size / 20), activation = 'relu'),
+            # Dense(ceil(input_size / 40), activation = 'relu'),
+            Dense(self.encoded_size, activation = 'relu'),
         ])
 
 
@@ -44,12 +44,12 @@ class AE(tf.keras.Model):
         # Replace "pass" statement with your code
         
         self.decoder = Sequential([
-            Dense(self.encoded_size, activation = 'sigmoid'),
-            Dense(ceil(input_size / 40), activation = 'sigmoid'),
-            Dense(ceil(input_size / 20), activation = 'sigmoid'),
-            Dense(ceil(input_size / 10), activation = 'sigmoid'),
-            Dense(ceil(input_size / 5), activation = 'sigmoid'),
-            Dense(ceil(input_size / 2), activation = 'sigmoid'),
+            Dense(self.encoded_size, activation = 'relu'),
+            # Dense(ceil(input_size / 40), activation = 'relu'),
+            # Dense(ceil(input_size / 20), activation = 'relu'),
+            Dense(ceil(input_size / 10), activation = 'relu'),
+            Dense(ceil(input_size / 5), activation = 'relu'),
+            Dense(ceil(input_size / 2), activation = 'relu'),
             Dense(input_size, activation = 'relu'),
         ])
 
