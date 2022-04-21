@@ -12,7 +12,7 @@ class AE(tf.keras.Model):
     def __init__(self, input_size):
         super(AE, self).__init__()
 
-        self.encoded_size = 20
+        self.encoded_size = 3
 
         ############################################################################################
         # TODO: Implement the fully-connected encoder architecture described in the notebook.      #
@@ -28,10 +28,9 @@ class AE(tf.keras.Model):
             Flatten(),
             Dense(input_size, activation = 'relu'),
             Dense(ceil(input_size / 2), activation = 'relu'),
-            Dense(ceil(input_size / 5), activation = 'relu'),
             Dense(ceil(input_size / 10), activation = 'relu'),
-            Dense(ceil(input_size / 20), activation = 'relu'),
-            # Dense(ceil(input_size / 40), activation = 'relu'),
+            Dense(ceil(input_size / 40), activation = 'relu'),
+            Dense(ceil(input_size / 120), activation = 'relu'),
             Dense(self.encoded_size, activation = 'relu'),
         ])
 
@@ -45,10 +44,9 @@ class AE(tf.keras.Model):
         
         self.decoder = Sequential([
             Dense(self.encoded_size, activation = 'relu'),
-            # Dense(ceil(input_size / 40), activation = 'relu'),
-            Dense(ceil(input_size / 20), activation = 'relu'),
+            Dense(ceil(input_size / 120), activation = 'relu'),
+            Dense(ceil(input_size / 40), activation = 'relu'),
             Dense(ceil(input_size / 10), activation = 'relu'),
-            Dense(ceil(input_size / 5), activation = 'relu'),
             Dense(ceil(input_size / 2), activation = 'relu'),
             Dense(input_size, activation = 'relu'),
         ])
@@ -126,8 +124,6 @@ def loss_function(x_hat, x):
     # Replace "pass" statement with your code
 
     reconstruction_loss = mse_loss_function(x_hat, x)
-
-    # print("reconstruction_loss:", reconstruction_loss.numpy())
     
     ################################################################################################
     #                            END OF YOUR CODE                                                  #

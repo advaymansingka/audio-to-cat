@@ -34,7 +34,7 @@ def train_vae(model, data):
     optimizer = tf.keras.optimizers.Adam(learning_rate = 0.001)
     total_loss = 0
 
-    batch_size = 30
+    batch_size = 64
     num_batches = data.shape[0] // batch_size
 
     for i in range(num_batches):
@@ -84,7 +84,6 @@ def main():
  
     data = np.array(data)
     data = tf.convert_to_tensor(data, dtype=tf.float32)
-    # data = tf.reshape(data, shape=(data.shape[0], data.shape[1]))
 
     print(data.shape)
 
@@ -94,9 +93,12 @@ def main():
     model = AE(num_features)
 
     # Train AE
-    for epoch_id in range(50):
+    for epoch_id in range(200):
         total_loss = train_vae(model, data)
         print(f"Train Epoch: {epoch_id} \tLoss: {total_loss/len(data):.6f}")
+
+
+    model.save_weights('./save_vals/test1-200e')
 
     plt.figure(1)
     visual_test(model, data)

@@ -1,0 +1,2 @@
+model_checkpoint_path: "test1-200e"
+all_model_checkpoint_paths: "test1-200e"
