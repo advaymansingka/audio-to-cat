@@ -22,10 +22,6 @@ def train_vae(model, data):
 
     Inputs:
     - model: Your VAE instance.
-    - train_loader: A tf.data.Dataset of MNIST dataset.
-    - args: All arguments.
-    - is_cvae: A boolean flag for Conditional-VAE. If your model is a Conditional-VAE,
-    set is_cvae=True. If it's a Vanilla-VAE, set is_cvae=False.
 
     Returns:
     - total_loss: Sum of loss values of all batches.
@@ -43,7 +39,7 @@ def train_vae(model, data):
 
         with tf.GradientTape() as tape:
 
-            x_hat = model.call(x_train)
+            x_hat, _ = model.call(x_train)
             loss = loss_function(x_hat, x_train)
 
             train_vars = model.trainable_variables
@@ -56,28 +52,38 @@ def train_vae(model, data):
 
 
 
-def visual_test(model, data):
+def visual_test(model, data, write_to_csv = False, show_plot = True, csv_filename = "encoded_test_def.csv"):
+
+
+    if write_to_csv:
+        f_csv = open(csv_filename, 'w')
+        f_csv.truncate()
+        csv_writer = csv.writer(f_csv)
+
 
     for i in range(data.shape[0]):
 
         x_train = data[i : (i+1)]
-        x_hat = model.call(x_train)
+        x_hat, encoded = model.call(x_train)
 
         x_train = x_train.numpy()
         x_hat = x_hat.numpy()
 
-        plt.cla()
-        plt.plot(x_train[0], color='blue', linewidth=1)
-        plt.plot(x_hat[0], color='red', linewidth=1)
-        plt.xlim(0, 250)
-        plt.ylim(0, 10000)
-        plt.pause(0.005)
+        if write_to_csv:
+            encoded = encoded.numpy()
+            csv_writer.writerow(encoded)
+
+        if show_plot:
+            plt.cla()
+            plt.plot(x_train[0], color='blue', linewidth=1)
+            plt.plot(x_hat[0], color='red', linewidth=1)
+            plt.xlim(0, 400)
+            plt.ylim(0, 10000)
+            plt.pause(0.003)
 
 
 
 def main():
-
-    # traintest = pd.read_csv("testcsv.csv")
 
     with open('sample_audio_1.csv', 'r') as f:
         data = list(csv.reader(f, delimiter=","))
@@ -93,15 +99,14 @@ def main():
     model = AE(num_features)
 
     # Train AE
-    for epoch_id in range(200):
+    for epoch_id in range(1500):
         total_loss = train_vae(model, data)
-        print(f"Train Epoch: {epoch_id} \tLoss: {total_loss/len(data):.6f}")
+        print(f"Epoch: {epoch_id} \tLoss: {total_loss/len(data):.4f}")
 
-
-    model.save_weights('./save_vals/test1-200e')
+    model.save_weights('./save_vals/test-2enc-1500epo')
 
     plt.figure(1)
-    visual_test(model, data)
+    visual_test(model, data, write_to_csv=True, csv_filename="encoded_test_4.csv")
     plt.show()
 
 

@@ -12,7 +12,7 @@ class AE(tf.keras.Model):
     def __init__(self, input_size):
         super(AE, self).__init__()
 
-        self.encoded_size = 3
+        self.encoded_size = 2
 
         ############################################################################################
         # TODO: Implement the fully-connected encoder architecture described in the notebook.      #
@@ -27,10 +27,10 @@ class AE(tf.keras.Model):
         self.encoder = Sequential([
             Flatten(),
             Dense(input_size, activation = 'relu'),
-            Dense(ceil(input_size / 2), activation = 'relu'),
-            Dense(ceil(input_size / 10), activation = 'relu'),
-            Dense(ceil(input_size / 40), activation = 'relu'),
-            Dense(ceil(input_size / 120), activation = 'relu'),
+            Dense(ceil(input_size / 3), activation = 'relu'),
+            Dense(ceil(input_size / 12), activation = 'relu'),
+            Dense(ceil(input_size / 50), activation = 'relu'),
+            Dense(ceil(input_size / 150), activation = 'relu'),
             Dense(self.encoded_size, activation = 'relu'),
         ])
 
@@ -44,10 +44,10 @@ class AE(tf.keras.Model):
         
         self.decoder = Sequential([
             Dense(self.encoded_size, activation = 'relu'),
-            Dense(ceil(input_size / 120), activation = 'relu'),
-            Dense(ceil(input_size / 40), activation = 'relu'),
-            Dense(ceil(input_size / 10), activation = 'relu'),
-            Dense(ceil(input_size / 2), activation = 'relu'),
+            Dense(ceil(input_size / 150), activation = 'relu'),
+            Dense(ceil(input_size / 50), activation = 'relu'),
+            Dense(ceil(input_size / 12), activation = 'relu'),
+            Dense(ceil(input_size / 3), activation = 'relu'),
             Dense(input_size, activation = 'relu'),
         ])
 
@@ -94,7 +94,7 @@ class AE(tf.keras.Model):
         ############################################################################################
         #                                      END OF YOUR CODE                                    #
         ############################################################################################
-        return x_hat
+        return x_hat, encoded_input
 
 
 

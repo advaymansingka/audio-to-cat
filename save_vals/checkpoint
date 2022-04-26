@@ -1,2 +1,2 @@
-model_checkpoint_path: "test1-200e"
-all_model_checkpoint_paths: "test1-200e"
+model_checkpoint_path: "test-2enc-1500epo"
+all_model_checkpoint_paths: "test-2enc-1500epo"
