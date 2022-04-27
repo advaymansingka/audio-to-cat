@@ -59,7 +59,10 @@ def run_fourier(audio_filename, time_window, shift_size, pause_time = 0.1, anima
         if write_to_csv: 
             csv_writer.writerow(y_vals)
 
+        print(f"Complete: {current_loc/signal_length * 100}")
+
         current_loc += shift_size
+
 
 
 
@@ -80,5 +83,5 @@ def plot_helper(pause_time, audio_filename):
 pause_time = 0.001
 
 plt.figure(1)
-run_fourier("wav_tests/Advay-OAMF.wav", 2500, 1000, pause_time, animate=True, write_to_csv=False, csv_filename="sample_audio_1.csv")
+run_fourier("wav_tests/DL_wiki.wav", 2000, 500, pause_time, animate=False, write_to_csv=True, csv_filename="DL_wiki_1.csv")
 plt.show()

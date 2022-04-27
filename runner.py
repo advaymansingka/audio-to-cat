@@ -10,8 +10,8 @@ import os
 import random
 import tensorflow as tf
 from tqdm import tqdm
-# from ae_full import AE, loss_function
-from ae_one_layer import AE, loss_function
+from ae_full import AE, loss_function
+# from ae_one_layer import AE, loss_function
 import csv
 import pandas as pd
 
@@ -54,6 +54,8 @@ def train_vae(model, data):
 
 def visual_test(model, data, write_to_csv = False, show_plot = True, csv_filename = "encoded_test_def.csv"):
 
+    if show_plot:
+        plt.figure(1)
 
     if write_to_csv:
         f_csv = open(csv_filename, 'w')
@@ -82,6 +84,9 @@ def visual_test(model, data, write_to_csv = False, show_plot = True, csv_filenam
             plt.pause(0.003)
 
 
+    if show_plot: 
+        plt.show()
+
 
 def main():
 
@@ -103,11 +108,9 @@ def main():
         total_loss = train_vae(model, data)
         print(f"Epoch: {epoch_id} \tLoss: {total_loss/len(data):.4f}")
 
-    #model.save_weights('./save_vals/layer01_wiki_100epo')
-
-    plt.figure(1)
-    visual_test(model, data, write_to_csv=True, csv_filename="encoded_test_5.csv", show_plot=False)
-    plt.show()
+    model.save_weights('./save_vals/full_wiki_100epo')
+    visual_test(model, data, write_to_csv=True, csv_filename="full_wiki_100epo.csv", show_plot=False)
+    
 
 
 if __name__ == "__main__":
