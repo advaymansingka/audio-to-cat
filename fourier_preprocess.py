@@ -1,3 +1,4 @@
+from typing import Type
 import matplotlib.pyplot as plt
 from scipy.fft import fft, fftfreq
 import numpy as np
@@ -55,7 +56,8 @@ def run_fourier(audio_filename, time_window, shift_size, pause_time = 0.1, anima
             plt.plot(xf, y_vals)
             plot_helper(pause_time, audio_filename)
 
-        if write_to_csv: csv_writer.writerow(y_vals)
+        if write_to_csv: 
+            csv_writer.writerow(y_vals)
 
         current_loc += shift_size
 
@@ -78,5 +80,5 @@ def plot_helper(pause_time, audio_filename):
 pause_time = 0.001
 
 plt.figure(1)
-run_fourier("Advay-OAMF.wav", 2500, 1000, pause_time, animate=True, write_to_csv=True, csv_filename="sample_audio_1.csv")
+run_fourier("wav_tests/Advay-OAMF.wav", 2500, 1000, pause_time, animate=True, write_to_csv=False, csv_filename="sample_audio_1.csv")
 plt.show()

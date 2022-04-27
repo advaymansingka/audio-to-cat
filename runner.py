@@ -9,9 +9,9 @@ import numpy as np
 import os
 import random
 import tensorflow as tf
-from tensorflow.math import sigmoid
 from tqdm import tqdm
-from ae import AE, loss_function
+# from ae_full import AE, loss_function
+from ae_one_layer import AE, loss_function
 import csv
 import pandas as pd
 
@@ -70,7 +70,7 @@ def visual_test(model, data, write_to_csv = False, show_plot = True, csv_filenam
         x_hat = x_hat.numpy()
 
         if write_to_csv:
-            encoded = encoded.numpy()
+            encoded = np.squeeze(encoded.numpy())
             csv_writer.writerow(encoded)
 
         if show_plot:
@@ -99,14 +99,14 @@ def main():
     model = AE(num_features)
 
     # Train AE
-    for epoch_id in range(1500):
+    for epoch_id in range(100):
         total_loss = train_vae(model, data)
         print(f"Epoch: {epoch_id} \tLoss: {total_loss/len(data):.4f}")
 
-    model.save_weights('./save_vals/test-2enc-1500epo')
+    #model.save_weights('./save_vals/layer01_wiki_100epo')
 
     plt.figure(1)
-    visual_test(model, data, write_to_csv=True, csv_filename="encoded_test_4.csv")
+    visual_test(model, data, write_to_csv=True, csv_filename="encoded_test_5.csv", show_plot=False)
     plt.show()
 
 
